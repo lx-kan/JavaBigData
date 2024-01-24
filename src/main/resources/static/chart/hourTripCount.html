@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>每小时骑行数量</title>
+    <script src="../js/echarts.js"></script>"
+    <script src="https://cdn.staticfile.org/axios/1.4.0/axios.min.js"></script>
+</head>
+<body>
+<div id="main" style="width: 1200px;height:600px;"></div>
+<script type="text/javascript">
+    //发送AJAX请求，获取数据
+    let url = "http:/chartData/listHourTripCount";
+    //添加年份
+    url = url + "?year=" +2019;
+    //添加月份
+    url = url + "&month=9";
+    axios.get(url).then(function (response){
+        //获取AXIOS中的数据
+        response = response.data;
+        //判断请求是否成功
+        if (response.code != 20000){
+            alert("获取数据失败"+ response.message)
+        }else {
+            console.log(response.data);
+            //初始化图表
+            initChart(response.data);
+        }
+    }).catch(function (error){
+        console.log(error);
+    })
+    function initChart(chartData) {
+        //修改所有的stack属性为False
+        for (var i = 0; i < chartData.seriesData.length; i++) {
+            chartData.seriesData[i].stack = false;
+        }
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+        option = {
+            title: {
+                text: '每小时骑行数量'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                type: 'scroll',
+                bottom: 2,
+                left: 25,
+                data: chartData.legendData
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: chartData.xaxisData
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: chartData.seriesData
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+        //批量设置23个图例的状态为不显示
+        let  nameArr = []
+        for (var i = 7; i<chartData.seriesData.length; i++){
+            nameArr[i-7] = {name:chartData.seriesData[i].name};
+        }
+        myChart.dispatchAction({
+            type: 'legendToggleSelect',
+            batch: nameArr
+        })
+    }
+
+</script>
+</body>
+</html>

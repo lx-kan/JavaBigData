@@ -1,0 +1,15 @@
+sqoop export \
+--connect jdbc:mysql://localhost:3306/nybikedb \
+--username root \
+--password root \
+--table t_hour_trip_count \
+--fields-terminated-by ',' \
+--export-dir /hive/warehouse/bike_dw.db/t_hour_trip_count
+
+sqoop export \
+--connect jdbc:mysql://localhost:3306/nybikedb \
+--username root \
+--password root \
+--table t_hour_gender_trip_count \
+--fields-terminated-by ',' \
+--export-dir /hive/warehouse/bike_dw.db/t_hour_gender_trip_count
