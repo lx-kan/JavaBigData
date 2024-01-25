@@ -4,6 +4,7 @@ import cn.highedu.nybike.common.exception.ServiceCode;
 import cn.highedu.nybike.common.exception.ServiceException;
 import cn.highedu.nybike.mapper.HourGenderTripCountMapper;
 import cn.highedu.nybike.mapper.HourTripCountMapper;
+import cn.highedu.nybike.po.entity.HourGenderTripCount;
 import cn.highedu.nybike.po.entity.HourTripCount;
 import cn.highedu.nybike.po.vo.HourGenderCountDTO;
 import cn.highedu.nybike.po.vo.LineVO;
@@ -21,9 +22,56 @@ public class ChartService {
     HourTripCountMapper hourTripCountMapper;
     @Autowired
     HourGenderTripCountMapper hourGenderTripCountMapper;
-    public List<HourGenderCountDTO> listHourGenderCount(Integer year, Integer month){
-
-        return null;
+    public List<HourGenderCountDTO> listHourGenderTripCount(Integer year, Integer month){
+        //构建查询对象
+        QueryWrapper<HourGenderTripCount> wrapper = new QueryWrapper<>();
+        String yearMonth = year + "-" + (month<10 ? "0" + month : month);
+        //wrapper.likeRight("startdata", yearMonth);
+        wrapper.lambda().likeRight(HourGenderTripCount::getStartdata, yearMonth);
+        //添加排序条件
+        wrapper.lambda().orderByAsc(HourGenderTripCount::getStartdata).orderByAsc(HourGenderTripCount::getHour);
+        //执行查询
+        List<HourGenderTripCount> hourGenderTripCounts = hourGenderTripCountMapper.selectList(wrapper);
+        if (hourGenderTripCounts.size()==0){
+            throw new ServiceException(ServiceCode.ERR_NOT_FOUND,"没有数据");
+        }
+        //数据封装
+        String dataHour = null;
+        HourGenderCountDTO tempDTO = null;
+        List<HourGenderCountDTO> list = new ArrayList<>(24*31);
+        for (HourGenderTripCount tripCount : hourGenderTripCounts){
+            // yyyy-MM-dd,integer -> yyyy/MM/dd HH:00
+            String startData = tripCount.getStartdata().replace("-", "/");
+            startData += " " + (tripCount.getHour() < 10 ? "0" + tripCount.getHour() : tripCount.getHour());
+            startData += ":00";
+            if(!startData.equals(dataHour)){
+                //新一个小时的数据
+                //保存上一个小时的数据
+                if (tempDTO != null){
+                    list.add(tempDTO);
+                }
+                //创建新一个小时的对象
+                tempDTO = new HourGenderCountDTO();
+                tempDTO.setDataHour(startData);
+                //更新标记
+                dataHour = startData;
+            }
+                //保存count
+            switch (tripCount.getGender()){
+                case 1:
+                    tempDTO.setManCount(tripCount.getCount());
+                    break;
+                case 2:
+                    tempDTO.setWomanCount(tripCount.getCount());
+                    break;
+                default:
+                    tempDTO.setUnknownCount(tripCount.getCount());
+            }
+        }
+        //保存最后一个小时的数据
+        list.add(tempDTO);
+        //返回结果
+        return list;
     }
 
     public LineVO<Integer> listHourTripCount(Integer year, Integer month){
