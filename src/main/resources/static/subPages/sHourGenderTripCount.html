@@ -1,0 +1,232 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">每小时骑行数量（分性别）</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">每小时骑行数量（分性别）</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<div class="ml-3">
+    <input type="month" id="monthIpt" value="2019-09">
+    <button id="searchBtn" onclick="search()">查询</button>
+</div>
+<!-- 为 ECharts 准备一个定义了宽高的 DOM -->
+<div id="main" class="col-md-12" style="height:700px;"></div>
+<script type="text/javascript">
+    var myChart = undefined; // 全局的图表对象
+
+    function search(){
+        let yearMonth = document.getElementById("monthIpt").value;
+        // alert(yearMonth)
+        if(yearMonth != ""){
+            // 生成请求参数
+            let year = yearMonth.substring(0,4);
+            let month = yearMonth.substring(5,7);
+            // 发送AJAX请求，获取数据
+            let url ="/chartData/listHourGenderTripCount";
+            // 添加年份
+            url = url +"?year="+year;
+            // 添加月份
+            url = url +"&month="+month;
+            axios.get(url).then(function(response){
+                // 获取AXIOS中封装的响应数据
+                response = response.data;
+                // 判断请求是否成功
+                if(response.code != 20000){ // 异常
+                    alert("获取数据失败：" + response.message);
+                }else{
+                    console.log(response.data)
+                    if(myChart != undefined){
+                        updateChart(response.data)
+                    }else{
+                        // 初始化图表
+                        initChart(response.data);
+                    }
+                }
+            }).catch(function(error){
+                console.log(error);
+            })
+        }
+    }
+
+    function initChart(chartData){
+        // 将服务器发来的数据转换成前端所需的格式
+        let sourceData = [
+            ['gender'],
+            ['unknown'],
+            ['man'],
+            ['woman']
+        ];
+        // 遍历并填充数据
+        for(var i = 0; i < chartData.length; i++){
+            let dto = chartData[i];
+            sourceData[0].push(dto.dataHour.replace(' ', '\n'))
+            sourceData[1].push(dto.unknownCount)
+            sourceData[2].push(dto.manCount)
+            sourceData[3].push(dto.womanCount)
+        }
+
+        // 基于准备好的dom，初始化echarts实例
+        myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+        option = {
+            legend: {},
+            tooltip: {
+                trigger: 'axis',
+                // showContent: false
+            },
+            dataset: {
+                source: sourceData
+            },
+            dataZoom: [
+                {
+                    show: true,
+                    realtime: true,
+                    start: 0,
+                    end: 20
+                },
+                {
+                    type: 'inside',
+                    realtime: true,
+                    start: 0,
+                    end: 20
+                }
+            ],
+            xAxis: { type: 'category' },
+            yAxis: { gridIndex: 0 },
+            grid: { top: '55%' },
+            series: [
+                {
+                    type: 'line',
+                    smooth: true,
+                    seriesLayoutBy: 'row',
+                    emphasis: { focus: 'series' }
+                },
+                {
+                    type: 'line',
+                    smooth: true,
+                    seriesLayoutBy: 'row',
+                    emphasis: { focus: 'series' }
+                },
+                {
+                    type: 'line',
+                    smooth: true,
+                    seriesLayoutBy: 'row',
+                    emphasis: { focus: 'series' }
+                },
+                {
+                    type: 'pie',
+                    id: 'pie',
+                    radius: '30%',
+                    center: ['50%', '25%'],
+                    emphasis: {
+                        focus: 'self'
+                    },
+                    label: {
+                        formatter: '{b}: {@[1]} ({d}%)'
+                    },
+                    encode: {
+                        itemName: 'gender',
+                        value: 1,
+                        tooltip: 1
+                    }
+                }
+            ]
+        };
+        myChart.on('updateAxisPointer', function (event) {
+            const xAxisInfo = event.axesInfo[0];
+            if (xAxisInfo) {
+                const dimension = xAxisInfo.value + 1;
+                myChart.setOption({
+                    series: {
+                        id: 'pie',
+                        label: {
+                            formatter: '{b}: {@[' + dimension + ']} ({d}%)'
+                        },
+                        encode: {
+                            value: dimension,
+                            tooltip: dimension
+                        }
+                    }
+                });
+            }
+        });
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    }
+
+    function updateChart(chartData){
+        // 将服务器发来的数据转换成前端所需的格式
+        let sourceData = [
+            ['gender'],
+            ['unknown'],
+            ['man'],
+            ['woman']
+        ];
+        // 遍历并填充数据
+        for(var i = 0; i < chartData.length; i++){
+            let dto = chartData[i];
+            sourceData[0].push(dto.dataHour.replace(' ', '\n'))
+            sourceData[1].push(dto.unknownCount)
+            sourceData[2].push(dto.manCount)
+            sourceData[3].push(dto.womanCount)
+        }
+
+        // 指定图表的配置项和数据
+        option = {
+            dataset: {
+                source: sourceData
+            },
+            series: [
+                {
+                    type: 'line',
+                    smooth: true,
+                    seriesLayoutBy: 'row',
+                    emphasis: { focus: 'series' }
+                },
+                {
+                    type: 'line',
+                    smooth: true,
+                    seriesLayoutBy: 'row',
+                    emphasis: { focus: 'series' }
+                },
+                {
+                    type: 'line',
+                    smooth: true,
+                    seriesLayoutBy: 'row',
+                    emphasis: { focus: 'series' }
+                },
+                {
+                    type: 'pie',
+                    id: 'pie',
+                    radius: '30%',
+                    center: ['50%', '25%'],
+                    emphasis: {
+                        focus: 'self'
+                    },
+                    label: {
+                        formatter: '{b}: {@[1]} ({d}%)'
+                    },
+                    encode: {
+                        itemName: 'gender',
+                        value: 1,
+                        tooltip: 1
+                    }
+                }
+            ]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    }
+</script>

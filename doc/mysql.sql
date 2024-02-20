@@ -11,7 +11,7 @@ hour INT,
 count INT
 );
 
--- 创建t_hour_trip_count
+-- 创建t_hour_gender_trip_count
 CREATE TABLE t_hour_gender_trip_count (
 startdata char(10),
 hour INT,

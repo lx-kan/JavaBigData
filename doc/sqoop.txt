@@ -4,7 +4,8 @@ sqoop export \
 --password root \
 --table t_hour_trip_count \
 --fields-terminated-by ',' \
---export-dir /hive/warehouse/bike_dw.db/t_hour_trip_count
+--export-dir /hive/warehouse/bike_dw.db/t_hour_trip_count \
+--where "startdata > '2019-09-30'"
 
 sqoop export \
 --connect jdbc:mysql://localhost:3306/nybikedb \
@@ -12,4 +13,5 @@ sqoop export \
 --password root \
 --table t_hour_gender_trip_count \
 --fields-terminated-by ',' \
---export-dir /hive/warehouse/bike_dw.db/t_hour_gender_trip_count
+--export-dir /hive/warehouse/bike_dw.db/t_hour_gender_trip_count \
+--where "startdata > '2019-09-30'"

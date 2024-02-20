@@ -1,0 +1,153 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">每小时骑行数量</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">每小时骑行数量</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<div class="ml-3">
+    <input type="month" id="monthIpt" value="2019-09">
+    <button id="searchBtn" onclick="search()">查询</button>
+</div>
+<!-- 为 ECharts 准备一个定义了宽高的 DOM -->
+<div id="main" class = "col-md-12" style="height:700px;"></div>
+
+<script type="text/javascript">
+
+    var myChart = undefined; // 全局的图表对象
+    function search(){
+        let yearMonth = document.getElementById("monthIpt").value;
+        // alert(yearMonth)
+        if(yearMonth != ""){
+            // 生成请求参数
+            let year = yearMonth.substring(0,4);
+            let month = yearMonth.substring(5,7);
+            // 发送AJAX请求，获取数据
+            let url ="/chartData/listHourTripCount";
+            // 添加年份
+            url = url +"?year="+year;
+            // 添加月份
+            url = url +"&month="+month;
+            axios.get(url).then(function(response){
+                // 获取AXIOS中封装的响应数据
+                response = response.data;
+                // 判断请求是否成功
+                if(response.code != 20000){ // 异常
+                    alert("获取数据失败：" + response.message);
+                }else{
+                    console.log(response.data)
+                    if(myChart != undefined){
+                        updateChart(response.data)
+                    }else{
+                        // 初始化图表
+                        initChart(response.data);
+                    }
+                }
+            }).catch(function(error){
+                console.log(error);
+            })
+        }
+    }
+
+    function initChart(chartData){
+        // 修改所有的stack属性为false
+        for(var i = 0; i<chartData.seriesData.length; i++){
+            chartData.seriesData[i].stack = false;
+        }
+
+        // 基于准备好的dom，初始化echarts实例
+        myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+        option = {
+            title: {
+                text: '每小时骑行数量'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                type: 'scroll',
+                bottom: 1,
+                left: 30,
+                data: chartData.legendData
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: chartData.xaxisData
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: chartData.seriesData
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+
+        // 批量设置后23个图例的状态为不显示
+        legendUnSelect(chartData)
+    }
+
+    function updateChart(chartData){
+        // 修改所有的stack属性为false
+        for(var i = 0; i<chartData.seriesData.length; i++){
+            chartData.seriesData[i].stack = false;
+        }
+        // 指定图表的配置项和数据
+        option = {
+            legend: {
+                type: 'scroll',
+                bottom: 1,
+                left: 30,
+                data: chartData.legendData
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: chartData.xaxisData
+            },
+            series: chartData.seriesData
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+
+        legendUnSelect(chartData)
+    }
+
+    function legendUnSelect(chartData){
+        // 批量设置后23个图例的状态为不显示
+        let nameArr = []
+        for(var i = 7; i<chartData.seriesData.length; i++){
+            nameArr[i-7] = {name: chartData.seriesData[i].name};
+        }
+        myChart.dispatchAction({
+            type: 'legendUnSelect',
+            batch: nameArr
+        })
+    }
+</script>

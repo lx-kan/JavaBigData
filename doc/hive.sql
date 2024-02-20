@@ -81,7 +81,7 @@ usertype,
 (2019-birth_year) as age,
 count(*) as count
 from bike_dw.t_tripdata
-where month(starttime) = 9
+where month(starttime) = 10
 group by substr(starttime,1,10),hour(starttime),gender,usertype,(2019-birth_year);
 
 --统计每天每小时的用户骑行数量
@@ -95,7 +95,7 @@ count int
 insert into bike_dw.t_hour_trip_count
 select startdata, hour, sum(count) as count
 from bike_dw.t_hour_gender_usertype_age_trip_count
-where month(startdata) = 9
+where month(startdata) = 10
 group by startdata, hour;
 
 --统计每天每小时不同性别、的用户骑行数量
@@ -110,8 +110,17 @@ count int
 insert into bike_dw.t_hour_gender_trip_count
 select startdata, hour, gender, sum(count) as count
 from bike_dw.t_hour_gender_usertype_age_trip_count
-where month(startdata) = 9
+where month(startdata) = 10
 group by startdata, hour, gender;
 
+
+--查询t_tripdata的最后两行数据
+select * from t_tripdata
+order by starttime desc
+limit 2;
+
+select * from t_hour_trip_count
+order by startdata desc
+limit 2;
 
 
