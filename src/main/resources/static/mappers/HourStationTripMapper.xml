@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.highedu.nybike.mapper.HourStationTripMapper">
+
+    <!--按月查询每天每小时起始站点出行数量-->
+    <!--List<HourStationTripCount> listStartStationTripCount(String yearMonth)-->
+    <select id="listStartStationTripCount"
+            resultType="cn.highedu.nybike.po.entity.HourStationTripCount">
+        select
+            t1.startdate, t1.hour, t1.start_station_id as stationId,
+            t2.station_name as stationName, sum(t1.count) as count, "start" as type
+        from t_hour_top5_start_top3_end t1 join t_station_info t2
+        on t1.start_station_id = t2.station_id
+        where substr(t1.startdate, 1, 7) = #{yearMonth}
+        group by t1.startdate, t1.hour, t1.start_station_id
+        order by t1.startdate, t1.hour
+    </select>
+
+    <!--按月查询每天每小时终止站点出行数量-->
+    <!--List<HourStationTripCount> listEndStationTripCount(String yearMonth)-->
+    <select id="listEndStationTripCount"
+            resultType="cn.highedu.nybike.po.entity.HourStationTripCount">
+        select
+            t1.startdate, t1.hour, t1.end_station_id as stationId,
+            t2.station_name as stationName, sum(t1.count) as count, "end" as type
+        from t_hour_top5_start_top3_end t1 join t_station_info t2
+                                                on t1.end_station_id = t2.station_id
+        where substr(t1.startdate, 1, 7) = #{yearMonth}
+        group by t1.startdate, t1.hour, t1.end_station_id
+        order by t1.startdate, t1.hour
+    </select>
+
+    <!--按月查询每天每小时起始站点和终止站点的经纬度-->
+    <!--List<HourStationTupleInfo> listHourStationTupleInfo(String yearMonth)-->
+    <select id="listHourStationTupleInfo"
+            resultType="cn.highedu.nybike.po.entity.HourStationTupleInfo">
+        select
+            startdate, hour
+             , start_station_id as startStationId
+             , end_station_id as endStationId
+        from t_hour_top5_start_top3_end
+        where substr(startdate, 1, 7) = #{yearMonth}
+        order by startdate, hour
+    </select>
+
+</mapper>
+

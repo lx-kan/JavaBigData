@@ -14,4 +14,21 @@ sqoop export \
 --table t_hour_gender_trip_count \
 --fields-terminated-by ',' \
 --export-dir /hive/warehouse/bike_dw.db/t_hour_gender_trip_count \
---where "startdata > '2019-09-30'"
+
+
+sqoop export \
+--connect jdbc:mysql://localhost:3306/nybikedb \
+--username root \
+--password root \
+--table t_hour_top5_start_top3_end \
+--fields-terminated-by ',' \
+--export-dir /hive/warehouse/bike_dw.db/t_hour_top5_start_top3_end
+
+sqoop export \
+--connect jdbc:mysql://localhost:3306/nybikedb \
+--username root \
+--password root \
+--table t_station_info \
+--fields-terminated-by ',' \
+--export-dir /hive/warehouse/bike_dw.db/t_station_info
+
