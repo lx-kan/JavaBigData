@@ -1,0 +1,55 @@
+<!-- 为 ECharts 准备一个定义了宽高的 DOM -->
+<div id="main" style="width: 1600px;height:800px;"></div>
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+    option = {
+        title: {
+            text: '辽宁三大效率'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data: ['技术效率', '纯技术效率', '规模效率']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        toolbox: {
+            feature: {
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: ['2014', '2015', '2016', '2017', '2018', '2019', '2020','2021','2022']
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [
+            {
+                name: '技术效率',
+                type: 'line',
+                data: [120, 132, 101, 134, 90, 230, 210,240,300]
+            },
+            {
+                name: '纯技术效率',
+                type: 'line',
+                data: [220, 182, 191, 234, 290, 330, 310,350,360]
+            },
+            {
+                name: '规模效率',
+                type: 'line',
+                data: [150, 232, 201, 154, 190, 330, 410]
+            },
+        ]
+    };
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+</script>

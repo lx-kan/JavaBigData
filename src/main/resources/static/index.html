@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>纽约市共享单车数据分析</title>
+  <title>省市效率分析系统</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -11,6 +11,8 @@
   <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <script type="text/javascript" src="https://api.map.baidu.com/getscript?v=3.0&ak=KOmVjPVUAey1G2E8zNhPiuQ6QiEmAwZu&services=&t=20231026190002"></script>
+  <script src="js/bmap.min.js" ></script>
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -73,7 +75,7 @@
     <!-- Brand Logo -->
     <a class="brand-link">
       <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">共享单车数据分析</span>
+      <span class="brand-text font-weight-light">省市效率分析系统</span>
     </a>
 
     <!-- Sidebar -->
@@ -110,7 +112,7 @@
               <!--              <i class="nav-icon fas fa-tachometer-alt"></i>-->
               <i class="nav-icon fas fa-chart-line"></i>
               <p>
-                骑行次数统计
+                超效率DEA分析
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
@@ -122,11 +124,292 @@
                 </a>
               </li>
               <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <!--              <i class="nav-icon fas fa-tachometer-alt"></i>-->
+                  <i class="nav-icon fas fa-chart-line"></i>
+                  <p>
+                    东北区域
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aInnerMongolia" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>内蒙古</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aLiaoNing" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>辽宁</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aJilin" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>吉林</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aHeilongjiang" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>黑龙江</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <!--              <i class="nav-icon fas fa-tachometer-alt"></i>-->
+                  <i class="nav-icon fas fa-chart-line"></i>
+                  <p>
+                    华北区域
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aBeijing" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>北京</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aHeBei" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>河北</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aShanXi" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>山西</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aTianjin" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>天津</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <!--              <i class="nav-icon fas fa-tachometer-alt"></i>-->
+                  <i class="nav-icon fas fa-chart-line"></i>
+                  <p>
+                    中南区域
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aHaiNan" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>海南</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aHeNan" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>河南</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aHuNan" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>湖南</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aGuangDong" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>广东</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aGuangXi" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>广西</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aHuBei" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>湖北</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <!--              <i class="nav-icon fas fa-tachometer-alt"></i>-->
+                  <i class="nav-icon fas fa-chart-line"></i>
+                  <p>
+                    华东区域
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aShangHai" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>上海</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aJiangSu" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>江苏</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aFuJian" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>福建</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aZheJiang" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>浙江</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aShanDong" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>山东</p>
+                    </a>
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aAnHui" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>安徽</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aJiangxi" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>江西</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <!--              <i class="nav-icon fas fa-tachometer-alt"></i>-->
+                  <i class="nav-icon fas fa-chart-line"></i>
+                  <p>
+                    西北区域
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aNingXia" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>宁夏</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aXiBeiShanXi" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>陕西</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aGansu" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>甘肃</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aQingHai" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>青海</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aXinJiang" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>新疆</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <!--              <i class="nav-icon fas fa-tachometer-alt"></i>-->
+                  <i class="nav-icon fas fa-chart-line"></i>
+                  <p>
+                    西南区域
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aGuiZhou" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>贵州</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aYunNan" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>云南</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aChongQing" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>重庆</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aSiChuan" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>四川</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="javascript:;" id="aXiZang" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>西藏</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item">
                 <a href="javascript:;" id="aHourGenderTripCount" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>每小时骑行数量<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;（分性别）</p>
                 </a>
               </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <!--              <i class="nav-icon fas fa-tachometer-alt"></i>-->
+              <i class="nav-icon fas fa-chart-line"></i>
+              <p>
+                Malmquist指数分析
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="javascript:;" id="aMalmquistbmap" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>各省效率排名</p>
+                </a>
+              </li>
+<!--              <li class="nav-item">-->
+<!--                <a href="javascript:;" id="aHourGendeTripCount" class="nav-link">-->
+<!--                  <i class="far fa-circle nav-icon"></i>-->
+<!--                  <p>每小时骑行数量<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;（分性别）</p>-->
+<!--                </a>-->
+<!--              </li>-->
             </ul>
           </li>
           <li class="nav-item">
@@ -214,12 +497,49 @@
   let sIndexUrl = "subPages/s_index.html"
   $(".content-wrapper").load(sIndexUrl);
 
-  // 绑定显示每小时骑行数量
+  // 绑定
   bindClickEvent("aHourTripCount", "subPages/sHourTripCount.html");
-  // 绑定显示每小时不同性别骑行数量
   bindClickEvent("aHourGenderTripCount", "subPages/sHourGenderTripCount.html");
-  // 绑定显示每小时热门站点
-  // bindClickEvent("aHourHotStation", "subPages/sHourHotStation.html");
+  //绑定MalmQuist指数
+  bindClickEvent("aMalmquistbmap", "subPages/sMalmquistbmap.html");
+  //绑定东北区域
+  bindClickEvent("aInnerMongolia", "subPages/NortheastRegion/sInnerMongolia.html");
+  bindClickEvent("aLiaoNing", "subPages/NortheastRegion/sLiaoNing.html");
+  bindClickEvent("aJilin", "subPages/NortheastRegion/sJiLin.html");
+  bindClickEvent("aHeilongjiang", "subPages/NortheastRegion/sHeiLongJiang.html");
+  //绑定华北区域
+  bindClickEvent("aBeijing", "subPages/NorthChinaRegion/sBeiJin.html");
+  bindClickEvent("aHeBei", "subPages/NorthChinaRegion/sHeBei.html");
+  bindClickEvent("aShanXi", "subPages/NorthChinaRegion/sShanXi.html");
+  bindClickEvent("aTianjin", "subPages/NorthChinaRegion/sTianjin.html");
+  //绑定中南区域
+  bindClickEvent("aHaiNan", "subPages/CentralAndRouthernRegion/sHaiNan.html");
+  bindClickEvent("aHeNan", "subPages/CentralAndRouthernRegion/sHeNan.html");
+  bindClickEvent("aHuNan", "subPages/CentralAndRouthernRegion/sHuNan.html");
+  bindClickEvent("aGuangDong", "subPages/CentralAndRouthernRegion/sGuangDong.html");
+  bindClickEvent("aGuangXi", "subPages/CentralAndRouthernRegion/sGuangXi.html");
+  bindClickEvent("aHuBei", "subPages/CentralAndRouthernRegion/sHuBei.html");
+  //绑定华东区域
+  bindClickEvent("aShangHai", "subPages/EastChinaRegion/sShanghai.html");
+  bindClickEvent("aJiangSu", "subPages/EastChinaRegion/sJiangSu.html");
+  bindClickEvent("aFuJian", "subPages/EastChinaRegion/sFujian.html");
+  bindClickEvent("aZheJiang", "subPages/EastChinaRegion/sZheJiang.html");
+  bindClickEvent("aShanDong", "subPages/EastChinaRegion/sShanDong.html");
+  bindClickEvent("aAnHui", "subPages/EastChinaRegion/sAnHui.html");
+  bindClickEvent("aJiangxi", "subPages/EastChinaRegion/sJiangxi.html");
+  //绑定西北区域
+  bindClickEvent("aNingXia", "subPages/NorthwestRegion/sNingXia.html");
+  bindClickEvent("aXiBeiShanXi", "subPages/NorthwestRegion/sXiBeiShanXi.html");
+  bindClickEvent("aGansu", "subPages/NorthwestRegion/sGansu.html");
+  bindClickEvent("aQingHai", "subPages/NorthwestRegion/sQingHai.html");
+  bindClickEvent("aXinJiang", "subPages/NorthwestRegion/sXinJiang.html");
+  //绑定西南区域
+  bindClickEvent("aGuiZhou", "subPages/SouthwestRegion/sGuiZhou.html");
+  bindClickEvent("aYunNan", "subPages/SouthwestRegion/sYunNan.html");
+  bindClickEvent("aChongQing", "subPages/SouthwestRegion/sChongQing.html");
+  bindClickEvent("aSiChuan", "subPages/SouthwestRegion/sSiChuan.html");
+  bindClickEvent("aXiZang", "subPages/SouthwestRegion/sXiZang.html");
+
 
   function bindClickEvent(id, url) {
     $("#"+id).click(function(){

@@ -1,15 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <script src="../js/echarts.js" ></script>
-    <script type="text/javascript" src="https://api.map.baidu.com/getscript?v=3.0&ak=KOmVjPVUAey1G2E8zNhPiuQ6QiEmAwZu&services=&t=20231026190002"></script>
-    <script src="../js/bmap.min.js" ></script>
-</head>
-<body>
 <!-- 为 ECharts 准备一个定义了宽高的 DOM -->
-<div id="main" style="width: 1600px;height:800px;"></div>
+<div id="main" class = "col-md-12" style="height:700px;"></div>
 <script type="text/javascript">
     // 基于准备好的dom，初始化echarts实例
     var myChart = echarts.init(document.getElementById('main'));
@@ -245,7 +235,6 @@
         for (var i = 0; i < data.length; i++) {
             var geoCoord = geoCoordMap[data[i].name];
             if (geoCoord) {
-                // res -> [{name:城市名称, value:[经度, 纬度, 空气质量]}, {}, {}...]
                 res.push({
                     name: data[i].name,
                     value: geoCoord.concat(data[i].value)
@@ -481,5 +470,3 @@
     // 使用刚指定的配置项和数据显示图表。
     myChart.setOption(option);
 </script>
-</body>
-</html>
